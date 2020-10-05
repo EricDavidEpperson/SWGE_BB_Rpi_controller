@@ -19,10 +19,15 @@ You'll need to do the following steps to start using this script:
      > sudo pip3 install bluepy smbus2
 3. Enable I2C:
 	   1.Run sudo raspi-config.
+	   
 	   2.Use the down arrow to select "5 Interfacing Options"
+	   
 	   3.Arrow down to P5 I2C.
+	   
 	   4.Select yes when it asks you to enable I2C
+	   
 	   5.Select OK and then Finish
+
 4. Once you copy this script to your Rpi, make sure to modify the permissions so it will run
      > sudo chmod +755 controller.py
      
