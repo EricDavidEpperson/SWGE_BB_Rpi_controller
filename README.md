@@ -10,7 +10,7 @@ Basic Functions provided:
  - turning left or right in forwards and reverse motion
  - head spins left or right
 
-This should also work with Disney SWGE R droids, but there is no code to control their independent head swivel. You'll only have the basic functions as listed above. It will be necessary to use another control input to properly enable that functionality. I also do not have a R droid to test/play with.
+This should also work with Disney SWGE R droids, but there is no code to control their independent head swivel. You'll only have the first 2 basic functions as listed above, along with the body itself spinning in place. It will be necessary to use another control input to properly enable that functionality (It's possible to use the BB head spin to control the R head spin, but you'd lose at least some functionality of the whole body being able to spin). I also do not have a R droid to test/play with.
 
 You'll need to do the following steps to start using this script:
 1. Make sure the dependent linux libraries are installed:
