@@ -1,11 +1,10 @@
 #!/usr/bin/python3
 
-import struct, time, smbus2
 import bluepy.btle as btle
+import random, smbus2, struct, time
 
 bus = smbus2.SMBus(1)
 addr = 0x20
-a = []
 
 def main():
   global bus_data, x, y
@@ -14,23 +13,26 @@ def main():
 
 def joystick():
 
-  #def sound():
-    #if push button, randomly picks and plays sound
-
-  def motor_cmd(a):
-    m0=struct.pack("<BB", a[0], a[1])
-    m1=struct.pack("<BB", a[2], a[3])
-    preamble=struct.pack("<BBBB", 0x29, 0x42, 0x05, 0x46)
-    postambl=struct.pack("<BBBB", 0x01, 0x2c, 0x00, 0x00)
-    data0=preamble+m0+postambl
-    data1=preamble+m1+postambl
+  def connection(a):
     try:
       p = btle.Peripheral()
       p.connect("FA:48:51:02:33:88", btle.ADDR_TYPE_RANDOM)
-      p.writeCharacteristic(0x000e, data0)
-      p.writeCharacteristic(0x000e, data1)
+      p.writeCharacteristic(0x000e, a[0])
+      p.writeCharacteristic(0x000e, a[1])
     except Exception as e:
       print(e)
+
+  def sound():
+    sounds=[[0x00, 0x00], [0x00, 0x01], [0x00, 0x02], [0x00, 0x03], [0x00, 0x04], [0x01, 0x00], [0x01, 0x01], [0x01, 0x02], [0x02, 0x00], [0x02, 0x01], [0x02, 0x02], [0x03, 0x00], [0x04, 0x00], [0x05, 0x00], [0x05, 0x01], [0x05, 0x02], [0x05, 0x03], [0x05, 0x04], [0x06, 0x00], [0x06, 0x01], [0x06, 0x02], [0x06, 0x03], [0x06, 0x04], [0x07, 0x00]]
+    d=random.choice(sounds)
+    d0=struct.pack("<BBBBBBBB", 0x27, 0x42, 0x0F, 0x44, 0x44, 0x00, 0x1F, d[0])
+    d1=struct.pack("<BBBBBBBB", 0x27, 0x42, 0x0F, 0x44, 0x44, 0x00, 0x18, d[1])
+    return [d0, d1]
+
+  def motor_cmd(b):
+    d0=struct.pack("<BBBBBBBBBB", 0x29, 0x42, 0x05, 0x46, b[0], b[1], 0x01, 0x2c, 0x00, 0x00)
+    d1=struct.pack("<BBBBBBBBBB", 0x29, 0x42, 0x05, 0x46, b[2], b[3], 0x01, 0x2c, 0x00, 0x00)
+    return [d0, d1]
 
   def vector(x, y):
     if x < 448:
@@ -77,10 +79,14 @@ def joystick():
   bus_data = bus.read_i2c_block_data(addr, 0x03, 5)
   x = (bus_data[0]<<8 | bus_data[1])>>6
   y = (bus_data[2]<<8 | bus_data[3])>>6
-#  bttn = bus_data[4]
-  a = vector(x, y)
-  motor_cmd(a)
-  time.sleep(.1)
+  bttn = bus_data[4]
+  if bttn == 0:
+    a = sound()
+  else:
+    b = vector(x, y)
+    a = motor_cmd(b)
+  connection(a)
+  time.sleep(.05)
 
 if __name__ == '__main__':
     main()
