@@ -17,14 +17,14 @@ You'll need to do the following steps to start using this script:
 1. Make sure the dependent linux libraries are installed:
      > sudo apt-get install python3-pip libglib2.0-dev i2c-tools
 2. Install the necessary Python dependencies (bluepy sends bluetooth commands to the droid, smbus2 reads the joystick)
-     > sudo pip3 install bluepy smbus2
+     > pip3 install bluepy smbus2
 3. Enable I2C:
 
 	   1.Run sudo raspi-config.
 	   
-	   2.Use the down arrow to select "5 Interfacing Options"
+	   2.Use the down arrow to select "Interfacing Options"
 	   
-	   3.Arrow down to P5 I2C.
+	   3.Arrow down to I2C.
 	   
 	   4.Select yes when it asks you to enable I2C
 	   
